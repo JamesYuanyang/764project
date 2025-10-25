@@ -1,0 +1,17 @@
+inherit_from: "./config_base.yaml"
+
+
+experiment:
+  name: "ALT-Temp+UW"
+  description: "Alternating training with temperature-based sampling and uncertainty weighting."
+
+strategy:
+  name: "alt_temp_uw"
+  task_sampling: "temperature"
+  use_alternating: true
+  use_uncertainty_weight: true
+  steps_per_alt: 50
+  ##temperature_tau: 2.0
+  uw_params:
+    logvar_clip: [-2.0, 2.0]
+    l2_reg: 1.0e-4

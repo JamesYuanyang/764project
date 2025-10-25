@@ -1,0 +1,14 @@
+inherit_from: "./config_base.yaml"
+
+
+experiment:
+  name: "ALT-Temp"
+  description: "Alternating training with temperature-based task sampling."
+
+strategy:
+  name: "alt_temp"
+  task_sampling: "temperature"    # 温度采样
+  use_alternating: true
+  use_uncertainty_weight: false
+  steps_per_alt: 50
+  ##temperature_tau: 2.0            # τ 控制少数任务曝光

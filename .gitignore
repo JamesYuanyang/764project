@@ -1,0 +1,72 @@
+# ========================================
+# 🐍 Python
+# ========================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ========================================
+# 🧠 PyCharm / VSCode
+# ========================================
+.idea/
+.vscode/
+*.iml
+
+# ========================================
+# 📊 Data & results
+# ========================================
+data/
+results/
+*.tar.gz
+*.zip
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.npy
+*.npz
+*.csv
+*.log
+
+# ========================================
+# 🧪 Checkpoints / outputs
+# ========================================
+checkpoint/
+checkpoints/
+logs/
+runs/
+wandb/
+tensorboard/
+output/
+outputs/
+
+# ========================================
+# 🧩 OS / misc
+# ========================================
+.DS_Store
+Thumbs.db

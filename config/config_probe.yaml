@@ -1,0 +1,21 @@
+# ==========================================
+# Linear Probe + Fine-tuning Configuration
+# ==========================================
+
+inherit_from: "./config_base.yaml"
+
+experiment:
+  name: "LinearProbe+Finetune"
+  description: "Two-stage training: freeze encoder for linear probe, then fine-tune jointly."
+
+strategy:
+  name: "probe_finetune"
+  type: "two_stage"
+  freeze_encoder: true           # 阶段1 冻结 encoder
+  probe_epochs: 10                # 阶段1 训练 heads
+  finetune_epochs: 10             # 阶段2 解冻 encoder 微调
+  task_sampling: "balanced"      # 每个任务等概率采样
+  steps_per_alt: null            # 不适用交替策略
+  temperature_tau: null
+  use_alternating: false
+  use_uncertainty_weight: false

@@ -1,0 +1,14 @@
+inherit_from: "./config_base.yaml"
+
+
+experiment:
+  name: "ALT+Balanced"
+  description: "Alternating training with balanced task sampling."
+
+strategy:
+  name: "alt"
+  task_sampling: "balanced"       # 均匀采样
+  use_alternating: true
+  use_uncertainty_weight: false
+  steps_per_alt: 50              # 每200步切换一次（Head→Encoder）
+  temperature_tau: null

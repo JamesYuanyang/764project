@@ -1,0 +1,14 @@
+inherit_from: "./config_base.yaml"
+
+
+experiment:
+  name: "JOINT+Proportional"
+  description: "Joint optimization with proportional task sampling."
+
+strategy:
+  name: "joint"
+  task_sampling: "proportional"   # 按样本量比例采样
+  use_alternating: false
+  use_uncertainty_weight: false
+  steps_per_alt: null
+  temperature_tau: null

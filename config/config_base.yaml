@@ -1,0 +1,155 @@
+ #==========================================
+ #Base Configuration (Anchor-style training)
+ #==========================================
+
+project_name: "fewtask_imbalanced_mtl"
+
+paths:
+  data_dir: "./data/processed"
+  output_dir: "../results"
+  log_dir: "./results/logs"
+  checkpoint_dir: "./results/checkpoints"
+
+seeds: [42, 43, 44, 45, 46]
+
+dataset:
+  name: "CIFAR10"
+  root: "../data"
+  download: true
+  class_pairs:
+    - [3, 5]   # Cat vs Dog
+    - [2, 7]   # Bird vs Frog
+    - [0, 8]   # Airplane vs Ship
+  sample_sizes:
+    - 8000
+    - 1000
+    - 1000
+  shuffle: true
+
+dataloader:
+  batch_size: 64
+  num_workers: 4
+  pin_memory: true
+
+model:
+  encoder:
+    type: "mlp_flatten"
+    input_dim: 3072
+    hidden_dim: 512
+    dropout: 0.0
+  heads:
+    num_tasks: 3
+    out_dim: 2
+
+optimizer:
+  type: "sgd"
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 0.001
+
+training:
+  epochs: 20
+  loss: "cross_entropy"
+  gradient_accumulation_steps: 1
+  max_grad_norm: 1.0
+  probe_epochs: 10         # ✅ 线性探针阶段（冻结 encoder）
+  finetune_epochs: 10
+
+strategy:
+  steps_per_alt: 50
+
+device:
+  use_gpu: true
+  gpu_ids: [0]
+
+
+## ==========================================
+## Base Configuration (Reproducing paper params
+## under few-task + imbalanced setting)
+## ==========================================
+#
+#project_name: "fewtask_imbalanced_mtl"
+#
+#paths:
+#  data_dir: "./data/processed"
+#  output_dir: "../results"
+#  log_dir: "./results/logs"
+#  checkpoint_dir: "./results/checkpoints"
+#
+#seed: 42
+#
+## -----------------------------
+## Dataset: CIFAR10 few-task + imbalance (8:1:1)
+## -----------------------------
+#dataset:
+#  name: "CIFAR10"
+#  root: "../data"
+#  download: true
+#  class_pairs:
+#    - [3, 5]   # Task 1: Cat vs Dog
+#    - [2, 7]   # Task 2: Bird vs Frog
+#    - [0, 8]   # Task 3: Airplane vs Ship
+#  sample_sizes:
+#    - 8000     # 主任务（长尾）
+#    - 1000     # 次任务
+#    - 1000     # 次任务
+#  shuffle: true
+#
+## -----------------------------
+## Dataloader
+## -----------------------------
+#dataloader:
+#  batch_size: 64
+#  num_workers: 4
+#  pin_memory: true
+#
+#model:
+#  encoder:
+#    type: "mlp_flatten"
+#    input_dim: 3072          # 图像 flatten 后的输入维度
+#    hidden_dim: 512          # 建议更宽的隐层（512 或 256 都可）
+#    dropout: 0.0
+#    init_std: 0.01
+#  heads:
+#    num_tasks: 3
+#    out_dim: 2
+#    lambda_a: 0.5
+#
+#
+## -----------------------------
+## Optimizer (same setup as paper)
+## -----------------------------
+#optimizer:
+#  type: "sgd"
+#  lr: 0.01                     # η：全局学习率
+#  bias_lr: 0.001              # 偏置项更小 lr
+#  momentum: 0.9
+#  weight_decay: 0.05          # λ_w：表示层正则化系数
+#  nesterov: false
+#
+## -----------------------------
+## Training setup
+## -----------------------------
+#training:
+#  epochs: 20                 # ⚙️ 小样本数据不需要 800 epoch
+#  loss: "cross_entropy"
+#  gradient_accumulation_steps: 1
+#  max_grad_norm: 1.0         # ✅ 启用梯度裁剪
+#  repeat_runs: 3             # 重复 3 次取均值 ± 标准差
+#  save_every: 999999         # ⚙️ 小样本无需频繁保存 (防止I/O开销)
+#
+## -----------------------------
+## Strategy: Alternate Training (ALT)
+## -----------------------------
+#strategy:
+#  type: "alt"                 # ALT (交替更新)
+#  steps_per_alt: 50            # 每步交替：1步head, 1步representation
+#  update_scheme: "alternate"
+#  per_step_batch_equal: true  # 每步batch采样平衡，用于减少梯度方差
+#
+## -----------------------------
+## Device setup
+## -----------------------------
+#device:
+#  use_gpu: true
+#  gpu_ids: [0]
